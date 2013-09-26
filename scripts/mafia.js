@@ -4465,6 +4465,42 @@ function Mafia(mafiachan) {
             sys.sendMessage(src, "", mafiachan);
             return;
         }
+
+        if (command === "tips") {
+            var themeName = "default";
+            if (mafia.state != "blank") {
+                themeName = mafia.theme.name.toLowerCase();
+            }
+            if (commandData != noPlayer) {
+                themeName = commandData.toLowerCase();
+                if (!mafia.themeManager.themes.hasOwnProperty(themeName)) {
+                    sys.sendMessage(src, "±Game: No such theme!", mafiachan);
+                    return;
+                }
+            }
+
+            var theme = mafia.themeManager.themes[themeName];
+            if (!theme.changelog) {
+                sys.sendMessage(src, "±Game: " + theme.name + " doesn't have a changelog!", mafiachan);
+                return;
+            }
+
+            sys.sendMessage(src, "", mafiachan);
+            sys.sendMessage(src, "±Game: " + theme.name + "'s tips: ", mafiachan);
+
+            if (Array.isArray(theme.changelog)) {
+                theme.changelog.forEach(function (line) {
+                    sys.sendMessage(src, line, mafiachan);
+                });
+            } else if (typeof theme.changelog === "object") {
+                for (var x in theme.changelog) {
+                    sys.sendMessage(src, x + ": " + theme.changelog[x], mafiachan);
+                }
+            }
+
+            sys.sendMessage(src, "", mafiachan);
+            return;
+        }
         
         if (command === "details") {
             var themeName = "default";
